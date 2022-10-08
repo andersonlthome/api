@@ -1,11 +1,9 @@
 {
-  "compilerOptions": {
-    "outDir": "../dist",
-    // "baseUrl": "",
-    "module": "commonjs",
-
+  "compilerOptions": {   
     /* Basic Options */
+    "outDir": "../dist",
     "incremental": true,
+    "module": "commonjs",
     "target": "es6",
 
     /* Strict Type-Checking Options */
@@ -34,6 +32,7 @@
     "emitDecoratorMetadata": true,
 
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   }
 }
