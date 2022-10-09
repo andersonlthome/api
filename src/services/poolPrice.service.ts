@@ -32,30 +32,6 @@ export class PoolPriceService {
 
 // export const FetchPoolPrice = async (poolAddress: string, chainId: number) => {
 export const FetchPoolPrice = async () => {
-  const abi: any[] = [];
-
-  // const infuraKey = process.env.INFURA_KEY;
-  const alchemyEth = process.env.ETH;
-
-  const tokens = {
-    // ropsten: {
-    //     address: "0x867d5aD572Eff4ec5E596FbC8B5E77E81f282D6c",
-    //     provider_url: `https://ropsten.infura.io/v3/${infuraKey}`,
-    //     abi,
-    // },
-    eth: {
-      address: "0x0DFcd028b5AD0E789AcB8d1C5bE1218FA59bC62A",
-      provider_url: `${alchemyEth}`,
-      abi,
-      id: 137,
-      gasPriceGwei: 50,
-    },
-  };
-
-  console.log("provider_url: ", tokens.eth.provider_url);
-  const provider = new ethers.providers.WebSocketProvider(
-    tokens.eth.provider_url
-  );
   // return await createPool(poolAddress, chainId);
   return await createPool();
 };
@@ -67,7 +43,6 @@ async function createPool() {
     getPoolImmutables(),
     getPoolState(),
   ]);
-
   const ctTokenA = await getContract(immutables.token0, ERC20ABI);
   const ctTokenB = await getContract(immutables.token1, ERC20ABI);
 
@@ -86,6 +61,8 @@ async function createPool() {
     ctTokenB.name()
   );
 
+  console.log(TokenA, TokenB);
+
   const pool = new Pool(
     TokenA,
     TokenB,
@@ -98,8 +75,31 @@ async function createPool() {
   return pool;
 }
 
-async function getContract( abi: any, signer?: any) {
+async function getContract(abi: any, signer?: any) {
   const poolAddress = "0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8";
+
+  // const infuraKey = process.env.INFURA_KEY;
+  // const alchemyEth = process.env.ETH;
+
+  const tokens = {
+    // ropsten: {
+    //     address: "0x867d5aD572Eff4ec5E596FbC8B5E77E81f282D6c",
+    //     provider_url: `https://ropsten.infura.io/v3/${infuraKey}`,
+    //     abi,
+    // },
+    eth: {
+      address: "0x0DFcd028b5AD0E789AcB8d1C5bE1218FA59bC62A",
+      provider_url:
+        "https://eth-mainnet.g.alchemy.com/v2/dVfk0JbYlzHpMU000lJZ39hrwf0f818u", //`${alchemyEth}`,
+      id: 137,
+      gasPriceGwei: 50,
+    },
+  };
+
+  const provider = new ethers.providers.WebSocketProvider(
+    tokens.eth.provider_url
+  );
+
   return new ethers.Contract(poolAddress, abi, signer ? signer : provider);
   // return new ethers.Contract(contractAddress, abi, signer ? signer : provider);
 }
@@ -107,7 +107,7 @@ async function getContract( abi: any, signer?: any) {
 // async function getPoolImmutables(poolAddress: string) {
 async function getPoolImmutables() {
   // const poolContract = await getContract(poolAddress, IUniswapV3PoolABI);
-  const poolContract = await getContract();
+  const poolContract = await getContract(IUniswapV3PoolABI);
 
   const [factory, token0, token1, fee, tickSpacing, maxLiquidityPerTick] =
     await Promise.all([
@@ -131,7 +131,7 @@ async function getPoolImmutables() {
 }
 
 async function getPoolState() {
-  const poolContract = await getPoolContract();
+  const poolContract = await getContract(IUniswapV3PoolABI);
 
   const [liquidity, slot] = await Promise.all([
     poolContract.liquidity(),
