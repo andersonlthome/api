@@ -1,7 +1,10 @@
 package-lock.json
 node_modules/
 yarn.lock
+yarn-error.log
 dist
 
 .env
 .env.local
+
+tsconfig.tsbuildinfo
