@@ -1,13 +1,14 @@
-# Sample Hardhat Project
+## API ENJOY
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+- To start the development run:
+'''
+yarn install
+yarn build
+yarn dev
+'''
 
-Try running some of the following tasks:
+- when altering schema.prisma example
+npx prisma migrate dev --name name_modification
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+- to see the Database
+npx prisma studio

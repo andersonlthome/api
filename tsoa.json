@@ -11,12 +11,29 @@
   },
   "spec": {
     "outputDirectory": "./dist",
-    "specVersion": 3
+    "specVersion": 3,
+    "securityDefinitions": {
+      "api_key": {
+        "type": "jwt",
+        "name": "authorization",
+        "in": "header"
+      },
+      "tsoa_auth": {
+        "type": "oauth2",
+        "authorizationUrl": "http://swagger.io/api/oauth/dialog",
+        "flow": "implicit",
+        "scopes": {
+          "write:user": "modify things",
+          "read:user": "read things"
+        }
+      }
+    }
   },
   "routes": {
     "basePath": "/api/v1",
     "entryFile": "./src/main.ts",
     "routesDir": "./src/routes",
-    "middleware": "express"
+    "middleware": "express",
+    "authenticationModule": "./src/authentication.ts"
   }
 }

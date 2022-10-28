@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // referentialIntegrity = "prisma"
+}
+
+model Pool {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  address   String   @db.VarChar(255)
+  token0    Token    @relation(fields: [token0Id], references: [id], name: "token0")
+  token0Id  Int
+  token1    Token    @relation(fields: [token1Id], references: [id], name: "token1")
+  token1Id  Int
+  price     Price?   @relation("pricePool")
+
+  // @@index(token0Id)
+  // @@index(token1Id)
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  symbol    String?
+  logoURL   String?
+  address   String   @unique @db.VarChar(255)
+  network   Int
+  standard  String   @default("ERC20")
+
+  project      Project @relation(fields: [projectId], references: [id])
+  projectId    Int
+  PoolAsToken0 Pool[]  @relation("token0")
+  PoolAsToken1 Pool[]  @relation("token1")
+
+  // @@index(projectId)
+
+  @@unique([address, network], name: "Token_address_network_unique_key")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  url         String?
+  tokens      Token[]
+}
+
+model Price {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  priceToken1 Float
+  priceToken2 Float
+  pool        Pool     @relation(fields: [poolId], references: [id], name: "pricePool")
+  poolId      Int      @unique
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String?  @unique
+  wallet    String?  @unique
+  password  String
+  name      String?
+}

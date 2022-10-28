@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import express, {
   urlencoded,
   json,
@@ -6,11 +8,13 @@ import express, {
   NextFunction
 } from "express";
 import { RegisterRoutes } from "./routes/routes";
-import swaggerUi from "swagger-ui-express";
+// import swaggerUi from "swagger-ui-express";
 import { ValidateError } from "tsoa";
 
 const app = express();
 const port = 3000;
+
+// TODO: CLUSTER LIKE MANBACK
 
 // Use body parser to read sent json payloads
 app.use(
@@ -21,9 +25,9 @@ app.use(
 app.use(json());
 
 // doesn't work yet, https://tsoa-community.github.io/docs/live-reloading.html
-app.use("/docs", swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
-  return res.send(swaggerUi.generateHTML(await import("../dist/swagger.json")));
-});
+// app.use("/docs", swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
+//   return res.send(swaggerUi.generateHTML(await import("../dist/swagger.json")));
+// });
 
 RegisterRoutes(app);
 
@@ -47,6 +51,7 @@ app.use(function errorHandler(
     });
   }
   if (err instanceof Error) {
+    console.error(`Caught Internal Server Error for ${req.path}:`, err.name, err.message, err.cause, err.stack)
     return res.status(500).json({
       message: "Internal Server Error",
     });

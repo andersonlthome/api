@@ -28,7 +28,17 @@ export class PoolPriceService {
   public get(): any {
     return FetchPoolPrice();
   }
+
+  public getAllPricesOfPool(): any {
+    
+
+    return {};
+  }
 }
+
+
+
+// below, logic to fetch pool price
 
 // export const FetchPoolPrice = async (poolAddress: string, chainId: number) => {
 export const FetchPoolPrice = async () => {
