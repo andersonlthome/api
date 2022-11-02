@@ -8,7 +8,7 @@ import {
   Route,
   SuccessResponse,
   // Exception
-  Security
+  Security,
 } from "tsoa";
 // import { ProjectParams } from "../interfaces/params";
 import { ProjectService } from "../services/project.service";
@@ -17,7 +17,16 @@ import { ProjectService } from "../services/project.service";
 export class ProjectController extends Controller {
   @Get("all")
   public async getAllProjects(): Promise<any> {
-    return new ProjectService().getAll();
+    const { error, data } = await new ProjectService().getAll();
+
+    if (!error) {
+      this.setStatus(201);
+      return data;
+    } else {
+      this.setStatus(500);
+      console.error(error);
+      return;
+    }
   }
 
   @SuccessResponse("201", "Saved") // Custom success response
@@ -27,7 +36,7 @@ export class ProjectController extends Controller {
     const { error } = await new ProjectService().save(requestBody);
 
     !error ? this.setStatus(201) : this.setStatus(500);
-
+    console.error(error);
     return;
   }
 }

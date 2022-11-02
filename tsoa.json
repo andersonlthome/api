@@ -3,14 +3,14 @@
   "controllerPathGlobs": ["./src/controllers/**/*controller.ts"],
   "noImplicitAdditionalProperties": "throw-on-extras",
   "swagger": {
-    "basePath": "/api/v1",
     "entryFile": "./src/main.ts",
     "specVersion": 3,
-    "outputDirectory": "./api/dist",
+    "outputDirectory": ".",
     "controllerPathGlobs": ["./src/controllers/**/*controller.ts"]
   },
   "spec": {
-    "outputDirectory": "./dist",
+    "basePath": "/api/v1",
+    "outputDirectory": "build",
     "specVersion": 3,
     "securityDefinitions": {
       "api_key": {

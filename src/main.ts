@@ -8,13 +8,16 @@ import express, {
   NextFunction
 } from "express";
 import { RegisterRoutes } from "./routes/routes";
-// import swaggerUi from "swagger-ui-express";
+import swaggerUi from "swagger-ui-express";
 import { ValidateError } from "tsoa";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 
 // TODO: CLUSTER LIKE MANBACK
+
+app.use(cors());
 
 // Use body parser to read sent json payloads
 app.use(
@@ -25,9 +28,9 @@ app.use(
 app.use(json());
 
 // doesn't work yet, https://tsoa-community.github.io/docs/live-reloading.html
-// app.use("/docs", swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
-//   return res.send(swaggerUi.generateHTML(await import("../dist/swagger.json")));
-// });
+app.use("/docs", swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
+  return res.send(swaggerUi.generateHTML(await import("../build/swagger.json")));
+});
 
 RegisterRoutes(app);
 
